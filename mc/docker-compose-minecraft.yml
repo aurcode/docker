@@ -1,0 +1,36 @@
+services:
+  minecraft:
+    image: itzg/minecraft-server
+    ports:
+      - 25565:25565
+    environment:
+      VERSION: "1.20.1"
+      SERVER_NAME: "The Civil War"
+      MOTD: "§cBienvenidas perras a §r §nServer" # The message of the day, shown below each server entry in the client UI
+      EULA: "TRUE" # By default the value should always be TRUE
+      #ICON: "./ico.png"
+      #OVERRIDE_ICON: "TRUE"
+      INIT_MEMORY: 3G
+      MAX_MEMORY: 6G
+
+      # Indicates type of the server if every is commented, default is vanilla
+      TYPE: "PAPER" # faster vanilla
+      # Settings option
+      ENABLE_WHITELIST: "FALSE"
+      ENFORCE_WHITELIST: "FALSE"
+      ONLINE_MODE: "FALSE" # server checks connecting players against Minecraft's account database
+      EXEC_DIRECTLY: "TRUE" # If you would like to docker attach to the Minecraft server console with color and interactive capabilities, then add
+      FORCE_GAMEMODE: "TRUE"
+      MODE: "CREATIVE"
+      DIFFICULTY: "HARD"
+      ANNOUNCE_PLAYER_ACHIEVEMENTS: "TRUE" # Allows server to announce when a player gets an achievement.
+
+    tty: true
+    stdin_open: true
+    restart: on-failure:1
+    volumes:
+      - D:/APP/containers/minecraft-data-without-mods:/data
+    deploy:
+      resources:
+        limits:
+          cpus: "2"

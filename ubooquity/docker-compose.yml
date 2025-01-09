@@ -1,0 +1,24 @@
+version: "2.1"
+services:
+  ubooquity:
+    image: lscr.io/linuxserver/ubooquity:latest
+    container_name: ubooquity
+    environment:
+      - PUID=1000
+      - PGID=1000
+      #- TZ=Etc/UTC
+    volumes:
+      #- /path/to/data:/config
+      #- /path/to/books:/books
+      #- /path/to/comics:/comics
+      #- /path/to/raw/files:/files
+      - C:\\Users\\aurcode\\files\\books:/books/general-books
+      - C:\\Users\\aurcode\\Desktop\\others-books:/books/others-books
+      - C:\\Users\\aurcode\\Desktop\\class-books:/books/class-books
+      - C:\\Users\\aurcode\\Desktop\\classes:/books/classes
+
+      - ./config:/config
+    ports:
+      - 9500:2202
+      - 9600:2203
+    restart: unless-stopped

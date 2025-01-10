@@ -11,17 +11,15 @@ services:
       ICON: "/extras/ico.png"
       OVERRIDE_ICON: "TRUE"
       OVERRIDE_SERVER_PROPERTIES: "TRUE"
-      INIT_MEMORY: 4G
-      MAX_MEMORY: 8G
+      INIT_MEMORY: 6G
+      MAX_MEMORY: 12G
 
       # Indicates type of the server if every is commented, default is vanilla
       TYPE: "FORGE"
-      #FORGE_VERSION: "47.3.22"
-      REMOVE_OLD_MODS: "TRUE"
+      FORGE_VERSION: "47.3.22"
+      #REMOVE_OLD_MODS: "TRUE"
       #MODS_FILE: "/extras/mods.txt"
-      CF_API_KEY: '$2a$10$vV0gW6.rO69RZgDTESwSWe6EIl55sxsK8Ic1WRIj3i0GyKORLki06'
-      CF_PAGE_URL: "/modpacks/1.20.1/aur/Minecraft-Legendary-Edition-1.20.1-2.3.zip"
-      # CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/minecraft-legendary-edition/files/6058317"
+      #GENERIC_PACK: "/modpacks/1.20.1/aur/Integrated-MC-1.3.6.zip"
 
       # Settings option
       ENABLE_WHITELIST: "FALSE"
@@ -29,11 +27,10 @@ services:
       ONLINE_MODE: "FALSE" # server checks connecting players against Minecraft's account database
       EXEC_DIRECTLY: "TRUE" # If you would like to docker attach to the Minecraft server console with color and interactive capabilities, then add
       ENABLE_ROLLING_LOGS: "TRUE" # Delete old logs
-      USE_MODPACK_START_SCRIPT: "TRUE"
       FORCE_GAMEMODE: "TRUE"
       MODE: "CREATIVE"
       DIFFICULTY: "HARD"
-      VIEW_DISTANCE: 10
+      #VIEW_DISTANCE: 10
       ALLOW_FLIGHT: "TRUE"
       ALLOW_NETHER: "TRUE"
       ENABLE_COMMAND_BLOCK: "TRUE"
@@ -43,10 +40,10 @@ services:
       RCON_CMDS_STARTUP:  |-
         /pregen start 200
         /gamerule doFireTick false
-
+        /gamerule keepInventory true
       RCON_CMDS_ON_CONNECT: |-
-        /effect give @p minecraft:regeneration infinity 255 true
-        /effect give @p minecraft:health_boost infinity 255 true
+        /effect give @p minecraft:regeneration infinite 255 true
+        /effect give @p minecraft:health_boost infinite 255 true
         /op @p
         /tell @p Welcome to The Hell, @p! Preparate pa'morir! 🎉
       RCON_CMDS_FIRST_CONNECT: |-
@@ -61,5 +58,5 @@ services:
     volumes:
       - ./ico.png:/extras/ico.png:ro
       - ./mods.txt:/extras/mods.txt:ro
-      - D:/APP/containers/minecraft-data-legendary-edition:/data
+      - D:/APP/containers/minecraft-data-legendary-edition-final:/data
       - D:/APP/containers/mods:/modpacks:ro

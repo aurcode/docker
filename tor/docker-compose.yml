@@ -1,0 +1,10 @@
+services:
+  tor_proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tor_proxy
+    ports:
+      - "9050:9050"
+      - "9040:9040"
+    restart: always

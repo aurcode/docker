@@ -20,8 +20,13 @@ This repository provides a lightweight Tor proxy setup using a custom Docker ima
 ### 1. Clone the Repository
 Clone the repository to your local machine:
 ```bash
-git clone <repository-url>
-cd <repository-folder>
+git clone git@github.com:aurcode/docker.git
+cd docker/tor
+```
+
+```
+git clone https://github.com/aurcode/docker.git
+cd docker/tor
 ```
 
 ### 2. Build and Run the Container

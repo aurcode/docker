@@ -1,4 +1,5 @@
-version: '3.6'
+volumes:
+  ollama:
 
 services:
   chatgpt:
@@ -6,7 +7,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      - DEFAULT_MODEL=mistral
+      - DEFAULT_MODEL=deepseek-r1:1.5b
       - OLLAMA_HOST=http://ollama:11434
 
   ollama:
@@ -14,7 +15,7 @@ services:
     ports:
       - 11434:11434
     volumes:
-      - ./ollama/models:/ollama/models
+      - ollama:/ollama/models
     environment:
       - OLLAMA_MODELS=/ollama/models
 
@@ -25,3 +26,5 @@ services:
             - driver: nvidia
               count: all
               capabilities: [ gpu ]
+
+ 

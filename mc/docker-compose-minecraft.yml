@@ -1,8 +1,8 @@
 services:
-  minecraft-without-mods:
+  minecraft:
     image: itzg/minecraft-server
     ports:
-      - 25566:25565
+      - 25565:25565
     environment:
       VERSION: "1.20.1"
       SERVER_NAME: "The Civil War"
@@ -40,3 +40,19 @@ services:
       resources:
         limits:
           cpus: "2"
+
+  mc-monitor:
+    image: itzg/mc-monitor
+    container_name: mc-monitor
+    command: export-for-prometheus
+    environment:
+      EXPORT_SERVERS: minecraft
+    depends_on:
+      - minecraft
+    networks:
+      - monitoring-network
+
+networks:
+  monitoring-network:
+    external: true
+    name: shared-monitoring-network

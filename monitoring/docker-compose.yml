@@ -1,11 +1,4 @@
 services:
-  mc-monitor:
-    image: itzg/mc-monitor
-    command: export-for-prometheus
-    environment:
-      EXPORT_SERVERS: minecraft
-#    depends_on:
-#      - minecraft
 
   node-exporter:
     image: prom/node-exporter:latest
@@ -22,6 +15,8 @@ services:
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     ports:
       - 9100:9100
+    networks:
+      - monitoring-network
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.50.0
@@ -34,6 +29,8 @@ services:
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - monitoring-network
 
   prometheus:
     image: prom/prometheus
@@ -45,14 +42,15 @@ services:
     depends_on:
       - node-exporter
       - cadvisor
-      - mc-monitor
+    networks:
+      - monitoring-network
 
   grafana:
     image: grafana/grafana-oss:${GRAFANA_VERSION:-8.3.3}
     ports:
       - "3000:3000"
     volumes:
-      - grafana-lib:/var/lib/grafana
+      #- grafana-lib:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./dashboards:/etc/grafana/dashboards
     depends_on:
@@ -63,7 +61,15 @@ services:
       GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
       GF_AUTH_DISABLE_SIGNOUT_MENU: "true"
       GF_AUTH_DISABLE_LOGIN_FORM: "true"
+    networks:
+      - monitoring-network
 
 volumes:
   prometheus-tsdb: {}
-  grafana-lib: {}
+  #grafana-lib: {}
+
+
+networks:
+  monitoring-network:
+    driver: bridge
+    name: shared-monitoring-network

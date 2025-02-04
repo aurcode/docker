@@ -11,51 +11,44 @@ services:
       ICON: "/extras/ico.png"
       OVERRIDE_ICON: "TRUE"
       OVERRIDE_SERVER_PROPERTIES: "TRUE"
-      INIT_MEMORY: 10G
-      MAX_MEMORY: 16G
+      INIT_MEMORY: 12G
+      MAX_MEMORY: 20G
 
       # Indicates type of the server if every is commented, default is vanilla
       TYPE: "FORGE"
       FORGE_VERSION: "47.3.22"
-      GENERIC_PACK: "/modpacks/1.20.1/aur/Integrated-MC-1.3.6.zip"
+      GENERIC_PACK: "/modpacks/Minecraft-Legendary-Edition-1.20.1-2.3.zip"
 
       # Settings option
       ENABLE_WHITELIST: "FALSE"
       ENFORCE_WHITELIST: "FALSE"
       ONLINE_MODE: "FALSE" # server checks connecting players against Minecraft's account database
       EXEC_DIRECTLY: "TRUE" # If you would like to docker attach to the Minecraft server console with color and interactive capabilities, then add
-      ENABLE_ROLLING_LOGS: "TRUE" # Delete old logs
+      ENABLE_ROLLING_LOGS: "FALSE" # Delete old logs
       FORCE_GAMEMODE: "TRUE"
       MODE: "CREATIVE"
-      DIFFICULTY: "HARD"
-      #VIEW_DISTANCE: 10
+      DIFFICULTY: "EASY"
       ALLOW_FLIGHT: "TRUE"
       ALLOW_NETHER: "TRUE"
       ENABLE_COMMAND_BLOCK: "TRUE"
-      #OP_PERMISSION_LEVEL: "4"
-      ANNOUNCE_PLAYER_ACHIEVEMENTS: "TRUE" # Allows server to announce when a player gets an achievement.
-      JVM_OPTS: "-Dfml.readTimeout=1000000"
+      ANNOUNCE_PLAYER_ACHIEVEMENTS: "TRUE"
 
       RCON_CMDS_STARTUP: |-
-        /pregen start 200
-        /gamerule doFireTick false
-        /gamerule keepInventory true
+        /gamerule keepInventory false
       RCON_CMDS_ON_CONNECT: |-
-        /effect give @p minecraft:regeneration infinite 255 true
-        /effect give @p minecraft:health_boost infinite 255 true
-        /op @p
         /tell @p Welcome to The Hell, @p! Preparate pa'morir! 🎉
-      RCON_CMDS_FIRST_CONNECT: |-
-        /pregen stop
-      RCON_CMDS_LAST_DISCONNECT: |-
-        /kill @e[type=minecraft:boat]
-        /pregen start 200
+      #RCON_CMDS_FIRST_CONNECT: |-
+      #  /pregen stop
+      #RCON_CMDS_LAST_DISCONNECT: |-
+      #  /kill @e[type=minecraft:boat]
+      #  /pregen start 200
 
     tty: true
     stdin_open: true
     restart: on-failure:3
     volumes:
-      - ./ico.png:/extras/ico.png:ro
-      - ./mods.txt:/extras/mods.txt:ro
-      - D:/APP/containers/minecraft-data:/data
-      - D:/APP/containers/mods:/modpacks:ro
+      - D:/containers/minecraft-mods/extras/mods.txt:/extras/mods.txt:ro
+      - D:/containers/minecraft-mods/extras/ico.png:/extras/ico.png:ro
+      - D:/containers/minecraft-mods/minecraft-data:/data
+      - D:/containers/minecraft-mods/modpacks:/modpacks:ro
+      #- D:/containers/minecraft-mods/mods:/mods:ro

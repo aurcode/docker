@@ -1,35 +1,41 @@
 services:
-  minecraft:
+  minecraft-without-mods:
     image: itzg/minecraft-server
     ports:
-      - 25565:25565
+      - 25566:25565
     environment:
       VERSION: "1.20.1"
       SERVER_NAME: "The Civil War"
-      MOTD: "§cBienvenidas perras a §r §nServer" # The message of the day, shown below each server entry in the client UI
-      EULA: "TRUE" # By default the value should always be TRUE
-      #ICON: "./ico.png"
-      #OVERRIDE_ICON: "TRUE"
+      MOTD: "§cWelcome to The Hell without Mods"
+      EULA: "TRUE"
+      ICON: "/extras/ico.png"
+      OVERRIDE_ICON: "TRUE"
+      OVERRIDE_SERVER_PROPERTIES: "TRUE"
       INIT_MEMORY: 3G
       MAX_MEMORY: 6G
 
-      # Indicates type of the server if every is commented, default is vanilla
-      TYPE: "PAPER" # faster vanilla
-      # Settings option
+      TYPE: "PAPER"
       ENABLE_WHITELIST: "FALSE"
       ENFORCE_WHITELIST: "FALSE"
-      ONLINE_MODE: "FALSE" # server checks connecting players against Minecraft's account database
-      EXEC_DIRECTLY: "TRUE" # If you would like to docker attach to the Minecraft server console with color and interactive capabilities, then add
+      ONLINE_MODE: "FALSE"
+      EXEC_DIRECTLY: "TRUE"
       FORCE_GAMEMODE: "TRUE"
       MODE: "CREATIVE"
       DIFFICULTY: "HARD"
-      ANNOUNCE_PLAYER_ACHIEVEMENTS: "TRUE" # Allows server to announce when a player gets an achievement.
+      ANNOUNCE_PLAYER_ACHIEVEMENTS: "TRUE"
+
+      RCON_CMDS_STARTUP: |-
+        /gamerule doFireTick false
+        /gamerule keepInventory false
+      RCON_CMDS_ON_CONNECT: |-
+        /op @p
 
     tty: true
     stdin_open: true
     restart: on-failure:1
     volumes:
-      - D:/APP/containers/minecraft-data-without-mods:/data
+      - D:/containers/minecraft-mods/extras/ico.png:/extras/ico.png:ro
+      - D:/containers/minecraft-mods/minecraft-data-without-mods:/data
     deploy:
       resources:
         limits:

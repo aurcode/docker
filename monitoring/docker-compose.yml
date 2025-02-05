@@ -32,21 +32,57 @@ services:
     networks:
       - monitoring-network
 
+  ping:
+    tty: true
+    stdin_open: true
+    expose:
+      - 9115
+    ports:
+      - 9115:9115
+    image: prom/blackbox-exporter
+    container_name: ping
+    restart: always
+    volumes:
+      - ./blackbox/config:/config
+    command:
+      - '--config.file=/config/blackbox.yml'
+    networks:
+      - monitoring-network
+
+  speedtest:
+    tty: true
+    stdin_open: true
+    expose:
+      - 9798
+    ports:
+      - 9798:9798
+    image: miguelndecarvalho/speedtest-exporter
+    container_name: speedtest
+    restart: always
+    networks:
+      - monitoring-network
+
   prometheus:
     image: prom/prometheus
     container_name: prometheus
     restart: unless-stopped
     volumes:
       - ./prometheus_manifest/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus_manifest/pinghosts.yaml:/etc/prometheus/pinghosts.yaml
       - prometheus-tsdb:/prometheus
     depends_on:
       - node-exporter
       - cadvisor
+      - speedtest
+      - ping
+    ports:
+      - 9090:9090
     networks:
       - monitoring-network
 
   grafana:
     image: grafana/grafana-oss:${GRAFANA_VERSION:-8.3.3}
+    container_name: grafana
     ports:
       - "3000:3000"
     volumes:
@@ -61,6 +97,7 @@ services:
       GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
       GF_AUTH_DISABLE_SIGNOUT_MENU: "true"
       GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_INSTALL_PLUGINS: flant-statusmap-panel,ae3e-plotly-panel
     networks:
       - monitoring-network
 

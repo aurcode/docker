@@ -1,0 +1,5 @@
+- targets:  # url;humanname;routing;switch
+    - http://www.google.com/;google.com;external;internetbox
+    - https://github.com/;github.com;external;internetbox
+    - https://www.youtube.com/;youtube.com;external;internetbox
+    - https://www.baidu.com/;baidu.com;external;internetbox

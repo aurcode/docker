@@ -1,24 +1,42 @@
-version: "3"
+volumes:
+  pihole-data: {}
 
-# More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
 services:
   pihole:
-    container_name: pihole
     image: pihole/pihole:latest
-    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+    container_name: pihole
+    hostname: pihole
+    environment:
+      TZ: 'Asia/Shanghai'
+      WEBPASSWORD: ''
+      DNS1: 223.5.5.5               # AliDNS
+      DNS2: 119.29.29.29            # Tencent DNS
+      DNSSEC: "false"               # Disable DNSSEC for better compatibility
+      REV_SERVER: "true"            # Enable conditional forwarding
+      #PROXY_SERVER: 'host.docker.internal:500'  # For VPN proxy
+      #DNS1: 127.0.0.1#5053  # Local DNS resolver
+      #DNS2: 1.1.1.1
+    volumes:
+      - 'pihole-data:/etc/pihole/'
+      - './dnsmasq.d/:/etc/dnsmasq.d/'
+      - './custom.list:/etc/pihole/custom.list'  # Local DNS entries
     ports:
       - "53:53/tcp"
       - "53:53/udp"
-      - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
-      - "80:80/tcp"
-    environment:
-      TZ: 'Asia/Hong Kong'
-      WEBPASSWORD: 'michimichistika'
-    # Volumes store your data between container upgrades
-    volumes:
-      - './etc-pihole:/etc/pihole'
-      - './etc-dnsmasq.d:/etc/dnsmasq.d'
-    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+      - "8053:80/tcp"
+      - "5335:5335/tcp"
+    #dns:
+    #  - 127.0.0.1
+    #  - 1.1.1.1
     cap_add:
-      - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+      - NET_ADMIN
     restart: unless-stopped
+    networks:
+      - pihole_network
+
+networks:
+  pihole_network:
+    driver: bridge
+
+# More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+#   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities

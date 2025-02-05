@@ -1,0 +1,2 @@
+172.17.0.1    local-services
+host.docker.internal:3000   service1.example.com
